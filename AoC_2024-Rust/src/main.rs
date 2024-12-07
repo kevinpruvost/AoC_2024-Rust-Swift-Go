@@ -1,11 +1,11 @@
-mod day6;
-use day6::*;
+mod day7;
+use day7::*;
 
 use std::time::Instant;
 
 fn main() -> std::io::Result<()> {
     let start = Instant::now();
-    day6_1();
+    day7_1();
     let duration = start.elapsed();
     println!("Time elapsed is: {:?}", duration);
     Ok(())

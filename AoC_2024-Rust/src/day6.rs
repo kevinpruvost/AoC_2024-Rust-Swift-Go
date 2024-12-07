@@ -13,7 +13,7 @@ struct PuzzleMap {
 }
 
 impl PuzzleMap {
-    pub fn new(contents: &String) -> Self {
+    pub fn new(contents: &str) -> Self {
         let mut obj: PuzzleMap = PuzzleMap{ values: Vec::new(), guardPosition: (0, 0) };
 
         for (i, line) in contents.lines().enumerate() {
