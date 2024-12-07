@@ -75,9 +75,6 @@ impl PuzzleInput {
                 if i >= row.numbers.len() as i64 {
                     return sumInput == row.result;
                 }
-                let mut sum_input_str = sumInput.to_string();
-                sum_input_str.push_str(&row.numbers[i as usize].to_string());
-
                 // Addition
                 if checkSum(row, sumInput + row.numbers[i as usize], i + 1) {
                     return true;
@@ -87,7 +84,8 @@ impl PuzzleInput {
                     return true;
                 }
                 // Concatenation
-                if checkSum(row, sum_input_str.parse::<i64>().unwrap(), i + 1) {
+                let sum_concat = (sumInput.to_string() + &row.numbers[i as usize].to_string()).parse::<i64>().unwrap();
+                if checkSum(row, sum_concat, i + 1) {
                     return true;
                 }
                 return false;
