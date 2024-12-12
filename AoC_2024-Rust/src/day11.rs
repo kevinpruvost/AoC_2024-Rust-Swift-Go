@@ -14,50 +14,45 @@ struct Puzzle {
 
 impl Puzzle {
     pub fn new(contents: &str) -> Self {
-        let mut obj = Puzzle {
-            stones: vec![],
+        Puzzle {
+            stones: contents
+                .split_whitespace()
+                .map(|x| x.parse().unwrap())
+                .collect(),
             visited: HashMap::new()
-        };
-
-        for nb in contents.split(" ") {
-            obj.stones.push(nb.parse().unwrap());
         }
-
-        obj
     }
 
     pub fn solve_rec(&mut self, stone: i64, i: i64) -> i64 {
-        if (i == 75) { return 1; }
-
-        if self.visited.contains_key(&(stone, i)) {
-            return self.visited.get(&(stone, i)).unwrap().clone();
+        if let Some(&result) = self.visited.get(&(stone, i)) {
+            return result;
         }
 
-        let mut res = 0;
-        if (stone == 0) {
-            res = self.solve_rec(1, i+1);
+        if i == 75 { return 1; }
+
+        let res = if stone == 0 {
+            self.solve_rec(1, i+1)
         } else {
-            let stoneStr = stone.to_string();
-            if stoneStr.len() % 2 == 0 {
-                let left_part = &stoneStr[0..stoneStr.len()/2];
-                let right_part = &stoneStr[stoneStr.len()/2..stoneStr.len()];
-                res = self.solve_rec(left_part.parse::<i64>().unwrap(), i+1) + self.solve_rec(right_part.parse::<i64>().unwrap(), i+1);
+            let digitsCount = i64::ilog10(stone);
+            if digitsCount % 2 == 0 {
+                let mid = digitsCount / 2;
+                let left_part = stone / 10_i64.pow(mid as u32);
+                let right_part = stone % 10_i64.pow(mid as u32);
+                self.solve_rec(left_part, i+1) + self.solve_rec(right_part, i+1)
             } else {
-                res = self.solve_rec(stone * 2024, i+1);
+                self.solve_rec(stone * 2024, i+1)
             }
-        }
+        };
         self.visited.insert((stone, i), res);
-        return res;
+        res
     }
 
     pub fn solve(&mut self) -> i64 {
-        let mut total = 0;
-        
-        for i in 0..self.stones.len() {
-            total += self.solve_rec(self.stones[i], 0);
-        }
-
-        total
+        let stones = self.stones.clone();
+        stones
+            .iter()
+            .map(|&stone| self.solve_rec(stone, 0))
+            .sum()
     }
 }
 
