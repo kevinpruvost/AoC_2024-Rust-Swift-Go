@@ -1,8 +1,8 @@
 [package]
 name = "AoC_2024-Rust"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 [dependencies]
 regex = "1"
-num = "0.4"
+num = {version = "0.4.3", features = ["std"]}
